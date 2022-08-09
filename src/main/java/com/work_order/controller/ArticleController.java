@@ -7,6 +7,8 @@ import com.work_order.dto.ArticleUpdateDTO;
 import com.work_order.service.ArticleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -64,7 +66,7 @@ public class ArticleController {
     }*/
 
     @ApiOperation(value = "Update Article")
-    @PutMapping("/update-articledto/")
+    @PutMapping("/update-article/")
     @ResponseBody
     public void UpdateArticleDTO(@RequestBody ArticleUpdateDTO dto) {
         articleService.updateArticleDTO(dto);
@@ -78,5 +80,17 @@ public class ArticleController {
     @GetMapping(path="/articlesActive")
     public List<ArticleResponseDTO> listArticlesActive(){
         return articleService.listArticlesActive();
+    }
+
+    @ApiOperation(value = "remove Affaire")
+    @PutMapping("/removeAffairefromarticle/{code}")
+    public void removeAffaireFromArticle( @PathVariable String code){
+        articleService.removeAffaireFromArticle(code);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> exceptionHandlerStatut(Exception s)
+    {
+        return new ResponseEntity<>(s.getMessage(), HttpStatus.NOT_ACCEPTABLE);
     }
 }

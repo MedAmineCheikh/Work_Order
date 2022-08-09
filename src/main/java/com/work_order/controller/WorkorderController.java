@@ -87,6 +87,16 @@ public class WorkorderController {
         return workOrderService.findByActiveWorkOrder();
     }
 
+    @ApiOperation(value ="Remove Employe")
+    @PutMapping(value = "/removeEmploye/{order}")
+    public void removeEmployeFromWorkOrder(@PathVariable String order){
+        workOrderService.removeEmployeFromWorkOrder(order);
+    }
+    @ApiOperation(value ="Remove Affaire")
+    @PutMapping(value = "/removeAffaire/{order}")
+    void removeAffaireFromWorkOrder(@PathVariable String order){
+        workOrderService.removeAffaireFromWorkOrder(order);
+    }
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> exceptionHandler(Exception e)
     {

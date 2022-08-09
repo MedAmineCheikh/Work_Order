@@ -6,6 +6,7 @@ import com.work_order.dto.ArticleResponseDTO;
 import com.work_order.dto.ArticleUpdateDTO;
 import com.work_order.entity.*;
 import com.work_order.entity.Article;
+import com.work_order.exceptions.StatutNotActiveException;
 import com.work_order.mapper.ArticleMapper;
 import com.work_order.repository.AffaireRepository;
 import com.work_order.repository.ArticleMissionRepository;
@@ -89,8 +90,17 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public void affecterAffaireToArticle(int affaireid, String code) {
         Affaire affaire=affaireRepository.findById(affaireid).get();
+       if (affaire.getStatut().equals(Statut.Activer)){
+           Article article=articleRepository.findById(code).get();
+           article.setAffaire(affaire);
+           articleRepository.save(article);
+       }
+        else throw new StatutNotActiveException("This Affaire is Desactivated");
+    }
+    @Override
+    public void removeAffaireFromArticle( String code){
         Article article=articleRepository.findById(code).get();
-        article.setAffaire(affaire);
+        article.setAffaire(null);
         articleRepository.save(article);
     }
 

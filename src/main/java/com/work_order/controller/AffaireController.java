@@ -8,6 +8,8 @@ import com.work_order.entity.Affaire;
 import com.work_order.service.AffaireService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -56,15 +58,27 @@ public class AffaireController {
     public void UpdateAffaireDTO(@RequestBody AffaireUpdateDTO dto) {
         affaireService.updateAffaireDTO(dto);
     }
-   /* @ApiOperation(value = "Affecter Article")
+
+    @ApiOperation(value = "Affecter Article")
     @PutMapping("/affecterArticleToAffaire/{code}/{affaireId}")
     public void affecterArticleToAffaire(@PathVariable String code, @PathVariable int affaireId) {
         affaireService.affecterArticleToAffaire(code,affaireId);
-    }*/
+    }
 
     @ApiOperation(value = "Récupérer la liste des Affaires Active")
     @GetMapping(path="/affairesActive")
     public List<AffaireResponseDTO> ListAffaireActive() {
         return affaireService.ListAffaireActive();
+    }
+
+    @PutMapping("/removeArticle/{code}/{affaireId}")
+    public void removeArticle(@PathVariable String code,@PathVariable int affaireId ){
+        affaireService.removeArticle(code,affaireId);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> exceptionHandlerStatut(Exception s)
+    {
+        return new ResponseEntity<>(s.getMessage(), HttpStatus.NOT_ACCEPTABLE);
     }
 }

@@ -78,8 +78,8 @@ public class WorkOrderServiceImpl implements WorkOrderService {
 
         Work_Order order =workOrderRepository.findById(Id).get();
         Employe employe= employeRestController.getEmploye(order.getEmployeId());
-        if (employe.getStatut().equals(Statut.Activer)){
-        order.setEmploye(employe);}
+
+        order.setEmploye(employe);
         return workOrderMapper.WorkOrderTOWorkOrderResponseDTO(order);
     }
 
@@ -91,9 +91,8 @@ public class WorkOrderServiceImpl implements WorkOrderService {
         for (Work_Order order: orders){
 
             Employe employe= employeRestController.getEmploye(order.getEmployeId());
-            if (employe.getStatut().equals(Statut.Activer))
-            {
-            order.setEmploye(employe);}
+
+            order.setEmploye(employe);
             }
         List<WorkOrderResponseDTO> workorderResponseDTOS=orders.stream()
                 .map(cust->workOrderMapper.WorkOrderTOWorkOrderResponseDTO(cust))
@@ -136,11 +135,27 @@ public class WorkOrderServiceImpl implements WorkOrderService {
     public void affecterAffaireToWorkOrder(int affaireid, String order) {
 
         Affaire affaire=affaireRepository.findById(affaireid).get();
+        if (affaire.getStatut().equals(Statut.Activer)){
+            Work_Order work_order=workOrderRepository.findById(order).get();
+            work_order.setAffaire(affaire);
+            workOrderRepository.save(work_order);
+        }
+        else throw new StatutNotActiveException("This Affaire is Desactivated");
+
+    }
+    @Override
+    public void removeEmployeFromWorkOrder(String order){
         Work_Order work_order=workOrderRepository.findById(order).get();
-        work_order.setAffaire(affaire);
+        work_order.setEmployeId(null);
+        workOrderRepository.save(work_order);
+
+    }
+    @Override
+    public void removeAffaireFromWorkOrder(String order){
+        Work_Order work_order=workOrderRepository.findById(order).get();
+        work_order.setAffaire(null);
         workOrderRepository.save(work_order);
     }
-
     @Override
     public List<WorkOrderResponseDTO> findByActiveWorkOrder() {
         List<Work_Order> work_orders=workOrderRepository.findByActiveWorkOrder();

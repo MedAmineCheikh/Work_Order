@@ -4,10 +4,9 @@ import com.work_order.dto.ArticleMissionRequestDTO;
 import com.work_order.dto.ArticleMissionResponseDTO;
 import com.work_order.dto.ArticleMissionResponseDTO;
 import com.work_order.dto.ArticleMissionUpdateDTO;
-import com.work_order.entity.Article;
+import com.work_order.entity.*;
 import com.work_order.entity.Article_Mission;
-import com.work_order.entity.Article_Mission;
-import com.work_order.entity.Work_Order;
+import com.work_order.exceptions.StatutNotActiveException;
 import com.work_order.mapper.ArticleMissionMapper;
 import com.work_order.repository.ArticleRepository;
 import com.work_order.repository.ArticleMissionRepository;
@@ -86,16 +85,34 @@ public class ArticleMissionServiceImpl implements ArticleMissionService {
     @Override
     public void affecterWorkOrderToArticleMission(String orderId, String MissionId) {
         Work_Order work_order=workOrderRepository.findById(orderId).get();
+        if (work_order.getStatut().equals(Statut.Activer)){
+            Article_Mission article_mission=articleMissionRepository.findById(MissionId).get();
+            article_mission.setWork_order(work_order);
+            articleMissionRepository.save(article_mission);
+        }
+        else throw new StatutNotActiveException("This Work Order is Desactivated");
+
+    }
+    @Override
+    public void removeWorkOrder(String MissionId){
         Article_Mission article_mission=articleMissionRepository.findById(MissionId).get();
-        article_mission.setWork_order(work_order);
+        article_mission.setWork_order(null);
         articleMissionRepository.save(article_mission);
     }
-
     @Override
     public void affecterArticleToArticleMission(String code, String missionId) {
         Article article=articleRepository.findById(code).get();
-        Article_Mission article_mission=articleMissionRepository.findById(missionId).get();
-        article_mission.setArticle(article);
+        if (article.getStatut().equals(Statut.Activer)){
+            Article_Mission article_mission=articleMissionRepository.findById(missionId).get();
+            article_mission.setArticle(article);
+            articleMissionRepository.save(article_mission);
+        } else throw new StatutNotActiveException("This Article is Desactivated");
+
+    }
+    @Override
+    public void removeArticle(String MissionId){
+        Article_Mission article_mission=articleMissionRepository.findById(MissionId).get();
+        article_mission.setArticle(null);
         articleMissionRepository.save(article_mission);
     }
 

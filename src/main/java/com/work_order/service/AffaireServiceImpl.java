@@ -5,7 +5,9 @@ import com.work_order.dto.AffaireResponseDTO;
 import com.work_order.dto.AffaireUpdateDTO;
 import com.work_order.entity.Affaire;
 import com.work_order.entity.Article;
+import com.work_order.entity.Statut;
 import com.work_order.entity.Work_Order;
+import com.work_order.exceptions.StatutNotActiveException;
 import com.work_order.mapper.AffaireMapper;
 import com.work_order.repository.AffaireRepository;
 import com.work_order.repository.ArticleRepository;
@@ -95,10 +97,33 @@ public class AffaireServiceImpl implements AffaireService {
     @Override
     public void affecterArticleToAffaire(String code, int affaireId) {
 
-        Affaire affaire=affaireRepository.findById(affaireId).get();
+
         Article article=articleRepository.findById(code).get();
-        affaire.getArticles().add(article);
-        affaireRepository.save(affaire);
+        if (article.getStatut().equals(Statut.Activer)){
+            Affaire affaire=affaireRepository.findById(affaireId).get();
+            affaire.getArticles().add(article);
+            affaireRepository.save(affaire);
+        } else throw new StatutNotActiveException("This Article is Desactivated");
+
+    }
+    @Override
+    public void removeArticle(String code, int affaireId )
+    {
+        Affaire affaire=affaireRepository.findById(affaireId).get();
+        Article article= articleRepository.findById(code).get();
+
+        for (Article articles:affaire.getArticles())
+        {
+            if (articles.getCode().equals(article.getCode()))
+            {
+                affaire.getArticles().remove(article);
+                affaireRepository.save(affaire);
+            }
+        }
+
+
+
+
     }
 
     @Override

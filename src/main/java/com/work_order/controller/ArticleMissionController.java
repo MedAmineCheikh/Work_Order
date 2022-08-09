@@ -6,6 +6,8 @@ import com.work_order.dto.ArticleMissionUpdateDTO;
 import com.work_order.service.ArticleMissionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -83,5 +85,21 @@ public class ArticleMissionController {
     public List<ArticleMissionResponseDTO> ListArticleMissionActive() {
         return articleMissionService.ListArticleMissionActive();
 
+    }
+    @ApiOperation( value = "Remove Work Order")
+    @PutMapping("/removeWorkorder/{orderId}")
+    public void removeWorkOrder(@PathVariable String orderId){
+        articleMissionService.removeWorkOrder(orderId);
+    }
+    @ApiOperation( value = "Remove Article")
+    @PutMapping("/removeArticle/{MissionId}")
+    public void removeArticle(@PathVariable String MissionId){
+        articleMissionService.removeArticle(MissionId);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> exceptionHandlerStatut(Exception s)
+    {
+        return new ResponseEntity<>(s.getMessage(), HttpStatus.NOT_ACCEPTABLE);
     }
 }

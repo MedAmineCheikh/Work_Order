@@ -21,4 +21,7 @@ public interface WorkOrderService {
 
      List<WorkOrderResponseDTO> findByActiveWorkOrder();
 
+    void removeEmployeFromWorkOrder(String order);
+    void removeAffaireFromWorkOrder(String order);
+
 }

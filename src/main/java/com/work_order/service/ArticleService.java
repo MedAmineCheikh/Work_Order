@@ -17,4 +17,5 @@ public interface ArticleService {
     public void updateArticleDTO(ArticleUpdateDTO dto);
     void affecterAffaireToArticle(int affaireid,String code);
     List<ArticleResponseDTO> listArticlesActive();
+    void removeAffaireFromArticle( String code);
 }

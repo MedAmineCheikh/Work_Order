@@ -18,4 +18,6 @@ public interface AffaireService {
     void affecterArticleToAffaire(String code,int affaireId);
 
     List<AffaireResponseDTO> ListAffaireActive();
+
+    public void removeArticle(String code, int affaireId );
 }

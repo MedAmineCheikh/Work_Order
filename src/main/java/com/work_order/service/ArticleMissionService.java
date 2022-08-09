@@ -21,4 +21,7 @@ public interface ArticleMissionService {
     void affecterArticleToArticleMission(String code,String missionId);
 
     List<ArticleMissionResponseDTO> ListArticleMissionActive();
+    void removeWorkOrder(String MissionId);
+
+    public void removeArticle(String MissionId);
 }
