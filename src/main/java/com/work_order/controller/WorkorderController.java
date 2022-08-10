@@ -88,12 +88,12 @@ public class WorkorderController {
     }
 
     @ApiOperation(value ="Remove Employe")
-    @PutMapping(value = "/removeEmploye/{order}")
+    @PutMapping(value = "/removeEmployefromorder/{order}")
     public void removeEmployeFromWorkOrder(@PathVariable String order){
         workOrderService.removeEmployeFromWorkOrder(order);
     }
     @ApiOperation(value ="Remove Affaire")
-    @PutMapping(value = "/removeAffaire/{order}")
+    @PutMapping(value = "/removeAffairefomorder/{order}")
     void removeAffaireFromWorkOrder(@PathVariable String order){
         workOrderService.removeAffaireFromWorkOrder(order);
     }

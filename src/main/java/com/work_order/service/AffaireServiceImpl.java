@@ -37,10 +37,10 @@ public class AffaireServiceImpl implements AffaireService {
 
     @Override
     public AffaireResponseDTO save(AffaireRequestDTO affaireRequestDTO) {
-        Affaire affaire =affaireMapper.AffaireRequestDTOAffaire(affaireRequestDTO);
+        Affaire affaire = affaireMapper.AffaireRequestDTOAffaire(affaireRequestDTO);
 
-        Affaire saveAffaire=affaireRepository.save(affaire);
-        AffaireResponseDTO affaireResponseDTO=affaireMapper.AffaireTOAffaireResponseDTO(saveAffaire);
+        Affaire saveAffaire = affaireRepository.save(affaire);
+        AffaireResponseDTO affaireResponseDTO = affaireMapper.AffaireTOAffaireResponseDTO(saveAffaire);
 
         return affaireResponseDTO;
     }
@@ -48,7 +48,7 @@ public class AffaireServiceImpl implements AffaireService {
     @Override
     public AffaireResponseDTO getAffaire(int n_Affiaire) {
 
-        Affaire affaire =affaireRepository.findById(n_Affiaire).get();
+        Affaire affaire = affaireRepository.findById(n_Affiaire).get();
 
         return affaireMapper.AffaireTOAffaireResponseDTO(affaire);
     }
@@ -57,9 +57,9 @@ public class AffaireServiceImpl implements AffaireService {
     @Override
     public List<AffaireResponseDTO> listAffaires() {
 
-        List<Affaire> affaires=affaireRepository.findAll();
-        List<AffaireResponseDTO>affaireResponseDTOS=affaires.stream()
-                .map(cust->affaireMapper.AffaireTOAffaireResponseDTO(cust))
+        List<Affaire> affaires = affaireRepository.findAll();
+        List<AffaireResponseDTO> affaireResponseDTOS = affaires.stream()
+                .map(cust -> affaireMapper.AffaireTOAffaireResponseDTO(cust))
                 .collect(Collectors.toList());
 
         return affaireResponseDTOS;
@@ -67,17 +67,14 @@ public class AffaireServiceImpl implements AffaireService {
 
     @Override
     public void delete(int n_Affiaire) {
-        Affaire affaire=affaireRepository.findById(n_Affiaire).get();
-        List<Work_Order> work_orders=workOrderRepository.findAll();
-        for (Article article: affaire.getArticles())
-        {
+        Affaire affaire = affaireRepository.findById(n_Affiaire).get();
+        List<Work_Order> work_orders = workOrderRepository.findAll();
+        for (Article article : affaire.getArticles()) {
             article.setAffaire(null);
 
         }
-        for (Work_Order order:work_orders)
-        {
-            if (order.getAffaire().getN_Affiaire()==affaire.getN_Affiaire())
-            {
+        for (Work_Order order : work_orders) {
+            if (order.getAffaire().getN_Affiaire() == affaire.getN_Affiaire()) {
                 order.setAffaire(null);
 
             }
@@ -89,8 +86,8 @@ public class AffaireServiceImpl implements AffaireService {
 
     @Override
     public void updateAffaireDTO(AffaireUpdateDTO dto) {
-        Affaire myAffaire =affaireRepository.findById(dto.getN_Affiaire()).get();
-       affaireMapper.updateAffaireFromDto(dto, myAffaire);
+        Affaire myAffaire = affaireRepository.findById(dto.getN_Affiaire()).get();
+        affaireMapper.updateAffaireFromDto(dto, myAffaire);
         affaireRepository.save(myAffaire);
     }
 
@@ -98,43 +95,37 @@ public class AffaireServiceImpl implements AffaireService {
     public void affecterArticleToAffaire(String code, int affaireId) {
 
 
-        Article article=articleRepository.findById(code).get();
-        if (article.getStatut().equals(Statut.Activer)){
-            Affaire affaire=affaireRepository.findById(affaireId).get();
+        Article article = articleRepository.findById(code).get();
+        if (article.getStatut().equals(Statut.Activer)) {
+            Affaire affaire = affaireRepository.findById(affaireId).get();
             affaire.getArticles().add(article);
             affaireRepository.save(affaire);
         } else throw new StatutNotActiveException("This Article is Desactivated");
 
     }
-    @Override
-    public void removeArticle(String code, int affaireId )
-    {
-        Affaire affaire=affaireRepository.findById(affaireId).get();
-        Article article= articleRepository.findById(code).get();
-
-        for (Article articles:affaire.getArticles())
-        {
-            if (articles.getCode().equals(article.getCode()))
-            {
-                affaire.getArticles().remove(article);
-                affaireRepository.save(affaire);
-            }
-        }
-
-
-
-
-    }
 
     @Override
     public List<AffaireResponseDTO> ListAffaireActive() {
-        List<Affaire> affaires=affaireRepository.findByActiveAffaire();
-        List<AffaireResponseDTO>affaireResponseDTOS=affaires.stream()
-                .map(cust->affaireMapper.AffaireTOAffaireResponseDTO(cust))
+        List<Affaire> affaires = affaireRepository.findByActiveAffaire();
+        List<AffaireResponseDTO> affaireResponseDTOS = affaires.stream()
+                .map(cust -> affaireMapper.AffaireTOAffaireResponseDTO(cust))
                 .collect(Collectors.toList());
 
-        return affaireResponseDTOS;
+        return affaireResponseDTOS ;
     }
 
+    @Override
+    public void removeArticle(String code, int affaireId) {
+        Affaire affaire = affaireRepository.findById(affaireId).get();
+        Article article = articleRepository.findById(code).get();
 
+        for (Article articles : affaire.getArticles()) {
+            if (articles.getCode().equals(article.getCode())) {
+                affaire.getArticles().remove(article);
+                affaireRepository.save(affaire);
+            }
+
+        }
+
+    }
 }

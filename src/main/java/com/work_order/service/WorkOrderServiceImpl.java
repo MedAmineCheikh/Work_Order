@@ -159,6 +159,12 @@ public class WorkOrderServiceImpl implements WorkOrderService {
     @Override
     public List<WorkOrderResponseDTO> findByActiveWorkOrder() {
         List<Work_Order> work_orders=workOrderRepository.findByActiveWorkOrder();
+        for (Work_Order order: work_orders){
+
+            Employe employe= employeRestController.getEmploye(order.getEmployeId());
+
+            order.setEmploye(employe);
+        }
         List<WorkOrderResponseDTO> workorderResponseDTOS=work_orders.stream()
                 .map(cust->workOrderMapper.WorkOrderTOWorkOrderResponseDTO(cust))
                 .collect(Collectors.toList());
