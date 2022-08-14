@@ -78,9 +78,18 @@ public class WorkOrderServiceImpl implements WorkOrderService {
     public WorkOrderResponseDTO getWorkorder(String Id) {
 
         Work_Order order =workOrderRepository.findById(Id).get();
-        Employe employe= employeRestController.getEmploye(order.getEmployeId());
+        if(!order.getEmployeId().equals(null)) {
+            try {
+                Employe employe = employeRestController.getEmploye(order.getEmployeId());
+                order.setEmploye(employe);
+            } catch (Exception e) {
+                throw new EmployeNotFoundException("Employe Not Found");
+            }
 
-        order.setEmploye(employe);
+
+        }
+
+
         return workOrderMapper.WorkOrderTOWorkOrderResponseDTO(order);
     }
 
