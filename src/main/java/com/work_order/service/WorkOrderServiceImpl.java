@@ -64,12 +64,13 @@ public class WorkOrderServiceImpl implements WorkOrderService {
     @Override
     public void updateWorkOrderDTO(WorkOrderUpdateDTO dto) {
         Work_Order myOrder =workOrderRepository.findById(dto.getId()).get();
+        if (!myOrder.getEmployeId().equals(null)){
         try {
             Employe employe= employeRestController.getEmploye(dto.getEmployeId());
 
         } catch (Exception e){
             throw  new EmployeNotFoundException("Employe Not Found") ;
-        }
+        }}
         workOrderMapper.updateWorkOrderFromDto(dto, myOrder);
         workOrderRepository.save(myOrder);
     }
@@ -89,10 +90,12 @@ public class WorkOrderServiceImpl implements WorkOrderService {
 
         List<Work_Order>orders=workOrderRepository.findAll();
         for (Work_Order order: orders){
+            if(!order.getEmployeId().equals(null)){
+                Employe employe= employeRestController.getEmploye(order.getEmployeId());
 
-            Employe employe= employeRestController.getEmploye(order.getEmployeId());
+                order.setEmploye(employe);
+            }
 
-            order.setEmploye(employe);
             }
         List<WorkOrderResponseDTO> workorderResponseDTOS=orders.stream()
                 .map(cust->workOrderMapper.WorkOrderTOWorkOrderResponseDTO(cust))

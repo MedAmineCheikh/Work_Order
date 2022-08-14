@@ -3,6 +3,7 @@ package com.work_order.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -15,6 +16,7 @@ import static javax.persistence.CascadeType.REFRESH;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 public class Article_Mission implements Serializable {
 
     @Id
@@ -26,7 +28,7 @@ public class Article_Mission implements Serializable {
     @ManyToOne(cascade =  CascadeType.MERGE)
     @JsonIgnore
     private Work_Order work_order;
-    @ManyToOne(cascade = {PERSIST, DETACH,MERGE,REFRESH},fetch = FetchType.LAZY)
+    @ManyToOne(cascade = {PERSIST, DETACH,MERGE,REFRESH})
     @JsonIgnore
     private Article article;
 }
