@@ -1,6 +1,7 @@
 package com.work_order.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,11 +24,14 @@ public class Work_Order implements Serializable {
 
     @Id
     private String Id;
+    @NotNull
     private String demandeur;
     private  String employeId;
     @Temporal(TemporalType.DATE)
+    @NotNull
     private Date debut_Previsionnel;
     @Temporal(TemporalType.DATE)
+    @NotNull
     private  Date fin_Previsionnel;
     @Temporal(TemporalType.DATE)
     private Date debut_Reel;
@@ -39,6 +43,7 @@ public class Work_Order implements Serializable {
     private BigDecimal frais_Mission;
     private BigDecimal hebergement;
     @Enumerated(EnumType.STRING)
+    @NotNull
     private Statut statut;
     @ManyToOne(cascade ={PERSIST, DETACH,MERGE,REFRESH})
     @JsonIgnore

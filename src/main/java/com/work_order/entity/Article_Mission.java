@@ -1,6 +1,7 @@
 package com.work_order.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,9 +22,12 @@ public class Article_Mission implements Serializable {
 
     @Id
     private String Id;
+    @NotNull
     private Double quantite_Mission;
+    @NotNull
     private  Double quantite_Utilise;
     @Enumerated(EnumType.STRING)
+    @NotNull
     private Statut statut;
     @ManyToOne(cascade =  CascadeType.MERGE)
     @JsonIgnore
