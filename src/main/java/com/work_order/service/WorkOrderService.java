@@ -7,7 +7,7 @@ import com.work_order.dto.WorkOrderUpdateDTO;
 import java.util.List;
 
 public interface WorkOrderService {
-    WorkOrderResponseDTO save(WorkOrderRequestDTO workorderRequestDTO);
+    WorkOrderResponseDTO save(WorkOrderRequestDTO workorderRequestDTO,int affaireid);
 
     WorkOrderResponseDTO getWorkorder(String Id);
 

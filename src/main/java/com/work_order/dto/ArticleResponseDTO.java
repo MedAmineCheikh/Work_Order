@@ -14,4 +14,6 @@ public class ArticleResponseDTO {
     private BigDecimal quantite_Realisee;
     private Affaire affaire;
     private Statut statut;
+    private int totalPages;
+
 }

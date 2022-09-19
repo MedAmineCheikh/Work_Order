@@ -1,12 +1,14 @@
 package com.work_order.dto;
 
 import com.work_order.entity.Affaire;
+import com.work_order.entity.Article;
 import com.work_order.entity.Employe;
 import com.work_order.entity.Statut;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class WorkOrderResponseDTO {
@@ -22,6 +24,9 @@ public class WorkOrderResponseDTO {
     private BigDecimal frais_Mission;
     private BigDecimal hebergement;
     private Statut statut;
+    private int totalPages;
+
     private Affaire affaire;
+    private List<Article> articles;
     private Employe employe;
 }

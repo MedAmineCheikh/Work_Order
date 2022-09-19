@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins="http://localhost:4200")
 @Api(tags = "ArticleMission management")
 public class ArticleMissionController {
 
@@ -31,7 +32,7 @@ public class ArticleMissionController {
     }
     @ApiOperation(value = "ajoute ArticleMission")
     @PostMapping(path="/savearticleMission")
-    public ArticleMissionResponseDTO save(ArticleMissionRequestDTO articleMissionRequestDTO){
+    public ArticleMissionResponseDTO save(@RequestBody ArticleMissionRequestDTO articleMissionRequestDTO){
         return articleMissionService.save(articleMissionRequestDTO);
     }
     @ApiOperation(value = "Récupérer ArticleMission")

@@ -22,5 +22,6 @@ public class AffaireResponseDTO {
     private BigDecimal montant_budgetaire_Matriel;
     private BigDecimal montant_budgetaire_Service;
     private Statut statut;
+    private int totalPages;
     private List<Article> articles;
 }

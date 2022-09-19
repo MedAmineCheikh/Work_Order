@@ -4,9 +4,11 @@ package com.work_order.controller;
 import com.work_order.dto.ArticleRequestDTO;
 import com.work_order.dto.ArticleResponseDTO;
 import com.work_order.dto.ArticleUpdateDTO;
+import com.work_order.entity.Article;
 import com.work_order.service.ArticleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins="http://localhost:4200")
 @Api(tags = "Article management")
 public class ArticleController {
 
@@ -30,9 +33,25 @@ public class ArticleController {
 
         return articleService.listArticles();
     }
+
+    @ApiOperation(value = "Récupérer la liste des Articles")
+    @GetMapping(path="/pagearticles")
+    public List<ArticleResponseDTO> PageArticles(@RequestParam (name = "page",defaultValue = "0")int page
+            , @RequestParam(name = "size",defaultValue = "10")int size)
+    {
+
+        return articleService.pageArticle(page,size);
+    }
+    @ApiOperation(value = "Récupérer search des Articles")
+    @GetMapping(path="/searcharticles")
+    public List<Article> searchArticles(@RequestParam(name = "Keyword",defaultValue = "")String kw)
+    {
+
+        return articleService.searchArticle("%"+kw+"%");
+    }
     @ApiOperation(value = "ajoute Article")
     @PostMapping(path="/savearticle")
-    public ArticleResponseDTO save(ArticleRequestDTO articleRequestDTO){
+    public ArticleResponseDTO save(@RequestBody ArticleRequestDTO articleRequestDTO){
         return articleService.save(articleRequestDTO);
     }
     @ApiOperation(value = "Récupérer Article")
@@ -73,7 +92,7 @@ public class ArticleController {
     }
     @ApiOperation(value = "affecter Affaire")
     @PutMapping("/affecterAffaireToArticle/{affaireid}/{code}")
-    public void affecterAffaireToArticle(@PathVariable int affaireid,@PathVariable String code) {
+    public void affecterAffaireToArticle(@RequestBody Article article, @PathVariable int affaireid, @PathVariable String code) {
         articleService.affecterAffaireToArticle(affaireid,code);
     }
     @ApiOperation(value = "Récupérer la liste des Articles Active")
@@ -93,4 +112,5 @@ public class ArticleController {
     {
         return new ResponseEntity<>(s.getMessage(), HttpStatus.NOT_ACCEPTABLE);
     }
+
 }

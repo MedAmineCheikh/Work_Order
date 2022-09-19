@@ -37,8 +37,8 @@ public class WorkOrderServiceImpl implements WorkOrderService {
     }
 
     @Override
-    public WorkOrderResponseDTO save(WorkOrderRequestDTO workorderRequestDTO) {
-
+    public WorkOrderResponseDTO save(WorkOrderRequestDTO workorderRequestDTO,int affaireid) {
+            if (workorderRequestDTO.getEmployeId()!=null){
        try {
            Employe employe= employeRestController.getEmploye(workorderRequestDTO.getEmployeId());
 
@@ -48,15 +48,18 @@ public class WorkOrderServiceImpl implements WorkOrderService {
         try {
             Employe employe= employeRestController.getEmploye(workorderRequestDTO.getEmployeId());
             if (employe.getStatut().equals(Statut.Desactiver)){
-                throw new StatutNotActiveException("This Employe is Desactivated");
+                throw new RuntimeException();
             }
         } catch (Exception s){
             throw new StatutNotActiveException("This Employe is Desactivated");
-        }
+        }}
 
         Work_Order order =workOrderMapper.WorkOrderRequestDTOWorkOrder(workorderRequestDTO);
         order.setId(UUID.randomUUID().toString());
+
         Work_Order saveWorkOrder=workOrderRepository.save(order);
+        affecterAffaireToWorkOrder(affaireid, order.getId());
+
         WorkOrderResponseDTO orderResponseDTO=workOrderMapper.WorkOrderTOWorkOrderResponseDTO(saveWorkOrder);
 
         return orderResponseDTO;
@@ -64,7 +67,7 @@ public class WorkOrderServiceImpl implements WorkOrderService {
     @Override
     public void updateWorkOrderDTO(WorkOrderUpdateDTO dto) {
         Work_Order myOrder =workOrderRepository.findById(dto.getId()).get();
-        if (!myOrder.getEmployeId().equals(null)){
+        if (myOrder.getEmployeId()!=null){
         try {
             Employe employe= employeRestController.getEmploye(dto.getEmployeId());
 
@@ -78,17 +81,14 @@ public class WorkOrderServiceImpl implements WorkOrderService {
     public WorkOrderResponseDTO getWorkorder(String Id) {
 
         Work_Order order =workOrderRepository.findById(Id).get();
-        if(!order.getEmployeId().equals(null)) {
+        if(order.getEmployeId()!=null) {
             try {
                 Employe employe = employeRestController.getEmploye(order.getEmployeId());
                 order.setEmploye(employe);
             } catch (Exception e) {
                 throw new EmployeNotFoundException("Employe Not Found");
             }
-
-
         }
-
 
         return workOrderMapper.WorkOrderTOWorkOrderResponseDTO(order);
     }
@@ -99,7 +99,7 @@ public class WorkOrderServiceImpl implements WorkOrderService {
 
         List<Work_Order>orders=workOrderRepository.findAll();
         for (Work_Order order: orders){
-            if(!order.getEmployeId().equals(null)){
+            if(order.getEmployeId()!=null){
                 Employe employe= employeRestController.getEmploye(order.getEmployeId());
 
                 order.setEmploye(employe);

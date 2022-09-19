@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins="http://localhost:4200")
 @Api(tags = "WorkOrder management")
 public class WorkorderController {
 
@@ -31,9 +32,9 @@ public class WorkorderController {
         return workOrderService.listWorkorders();
     }
     @ApiOperation(value = "ajoute WorkOrder")
-    @PostMapping(path="/saveworkorder")
-    public WorkOrderResponseDTO save(WorkOrderRequestDTO workorderRequestDTO){
-        return workOrderService.save(workorderRequestDTO);
+    @PostMapping(path="/saveworkorder/{affaireid}")
+    public WorkOrderResponseDTO save(@RequestBody WorkOrderRequestDTO workorderRequestDTO,@PathVariable int affaireid){
+        return workOrderService.save(workorderRequestDTO,affaireid);
     }
     @ApiOperation(value = "Récupérer WorkOrder")
     @GetMapping(path = "/workorder/{id}")

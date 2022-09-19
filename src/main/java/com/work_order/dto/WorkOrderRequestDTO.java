@@ -1,5 +1,7 @@
 package com.work_order.dto;
 
+import com.work_order.entity.Affaire;
+import com.work_order.entity.Article;
 import com.work_order.entity.Statut;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -23,5 +26,7 @@ public class WorkOrderRequestDTO {
     private Boolean fichier;
     private BigDecimal frais_Mission;
     private BigDecimal hebergement;
+    private Affaire affaire;
+    private List<Article> articles;
     private Statut statut;
 }

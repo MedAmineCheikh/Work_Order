@@ -11,9 +11,12 @@ import com.work_order.mapper.ArticleMapper;
 import com.work_order.repository.AffaireRepository;
 import com.work_order.repository.ArticleMissionRepository;
 import com.work_order.repository.ArticleRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -102,6 +105,24 @@ public class ArticleServiceImpl implements ArticleService {
         Article article=articleRepository.findById(code).get();
         article.setAffaire(null);
         articleRepository.save(article);
+    }
+
+    @Override
+    public List<Article> searchArticle(String Keyword) {
+        List<Article> articles=articleRepository.searchArticle(Keyword);
+        return articles;
+    }
+
+    @Override
+    public List<ArticleResponseDTO> pageArticle(int page,int size) {
+        Page<Article> articlePage=articleRepository.findAll(PageRequest.of(page,size));
+
+            List<ArticleResponseDTO> articleResponseDTO
+                    = articlePage.getContent().stream().map(article ->
+                    articleMapper.ArticleTOArticleResponseDTO(article)).collect(Collectors.toList());
+
+
+        return articleResponseDTO ;
     }
 
     @Override

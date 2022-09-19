@@ -2,6 +2,7 @@ package com.work_order.service;
 
 import com.work_order.dto.*;
 import com.work_order.entity.Affaire;
+import com.work_order.entity.Article;
 import com.work_order.entity.Work_Order;
 
 import java.util.List;
@@ -20,4 +21,8 @@ public interface AffaireService {
     List<AffaireResponseDTO> ListAffaireActive();
 
     public void removeArticle(String code, int affaireId );
+
+    public List<Article> getaffaireArticle(int id);
+
+    List<AffaireResponseDTO> searchAffaire(String kw, int page, int size);
 }

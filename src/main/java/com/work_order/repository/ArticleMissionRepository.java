@@ -11,4 +11,5 @@ import java.util.List;
 public interface ArticleMissionRepository extends JpaRepository<Article_Mission,String> {
     @Query("select m from Article_Mission m where m.statut= com.work_order.entity.Statut.Activer")
     List<Article_Mission> findbyActiveMission();
+
 }

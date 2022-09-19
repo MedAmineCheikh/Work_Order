@@ -13,8 +13,11 @@ import com.work_order.repository.AffaireRepository;
 import com.work_order.repository.ArticleRepository;
 import com.work_order.repository.WorkOrderRepository;
 import org.apache.commons.lang.ObjectUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -127,5 +130,25 @@ public class AffaireServiceImpl implements AffaireService {
 
         }
 
+    }
+
+    @Override
+    public List<Article>  getaffaireArticle(int id) {
+        Affaire affaire=affaireRepository.findById(id).get();
+        List<Article> articleList=new ArrayList<>();
+        for (Article article:affaire.getArticles()){
+            articleList.add(article);
+        }
+        return articleList;
+    }
+
+    @Override
+    public List<AffaireResponseDTO> searchAffaire(String kw, int page, int size) {
+        Page<Affaire> affaires = affaireRepository.searchAffaireByDesignation_Affaire(kw, PageRequest.of(page, size));
+
+        List<AffaireResponseDTO>  affaireResponseDTO=affaires.getContent().stream().map(op -> affaireMapper.AffaireTOAffaireResponseDTO(op
+        )).collect(Collectors.toList());
+        affaireResponseDTO.forEach(affaireResponseDTO1 -> affaireResponseDTO1.setTotalPages(affaires.getTotalPages()));
+        return affaireResponseDTO;
     }
 }

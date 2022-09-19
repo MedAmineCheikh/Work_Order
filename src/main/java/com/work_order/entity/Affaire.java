@@ -39,7 +39,7 @@ public class Affaire implements Serializable {
     private BigDecimal montant_budgetaire_Service;
     @Enumerated(EnumType.STRING)
     private Statut statut;
-    @OneToMany(cascade={PERSIST, DETACH,MERGE,REFRESH})
+    @OneToMany(cascade={PERSIST, DETACH,MERGE,REFRESH},mappedBy = "affaire",fetch = FetchType.EAGER)
     @JsonIgnore
     private List<Article> articles;
 

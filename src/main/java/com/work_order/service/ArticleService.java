@@ -4,6 +4,7 @@ import com.work_order.dto.ArticleRequestDTO;
 import com.work_order.dto.ArticleResponseDTO;
 import com.work_order.dto.ArticleUpdateDTO;
 import com.work_order.entity.Article;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -18,4 +19,7 @@ public interface ArticleService {
     void affecterAffaireToArticle(int affaireid,String code);
     List<ArticleResponseDTO> listArticlesActive();
     void removeAffaireFromArticle( String code);
+    List<Article> searchArticle(String Keyword);
+
+    public List<ArticleResponseDTO> pageArticle(int page,int size);
 }

@@ -13,4 +13,6 @@ public class ArticleMissionResponseDTO {
     private Work_Order work_order;
     private Article article;
     private Statut statut;
+    private int totalPages;
+
 }
